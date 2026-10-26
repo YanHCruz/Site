@@ -3,13 +3,17 @@ let vagasFiltradas = [];
 let pagina = 1;
 const porPagina = 5;
 
-// 1. Busca os dados do arquivo JSON
+  const vagasAtivas = vagasFiltradas.filter(vagas => vagas.staVag === true);
+  const vagasInativas = vagasFiltradas.filter(vagas => vagas.staVag === false);
+
+// Busca os dados do arquivo JSON
 fetch("vagas.json")
   .then((resposta) => resposta.json())
   .then((dados) => {
     todasVagas = dados;
     vagasFiltradas = [...todasVagas];
-    render(); // Só renderiza a tela DEPOIS que os dados chegarem
+    vagasFiltradas = vagasFiltradas.filter(vagas => vagas.staVag === true); // Só filtra as vagas caso o status for = true
+    render(); 
   })
   .catch((erro) => {
     console.error("Erro ao carregar as vagas:", erro);
@@ -17,7 +21,7 @@ fetch("vagas.json")
       '<p style="text-align:center; padding:30px; color:red;">Erro ao carregar as vagas. Verifique se o servidor local (Live Server) está rodando.</p>';
   });
 
-// 2. Função principal para desenhar as vagas na tela
+// Função principal para desenhar as vagas na tela
 function render() {
   const lista = document.getElementById("jobs");
   lista.innerHTML = "";
@@ -63,7 +67,7 @@ function render() {
   renderPagination();
 }
 
-// 3. Paginação
+// Paginação
 function renderPagination() {
   const total = Math.ceil(vagasFiltradas.length / porPagina);
   const pag = document.getElementById("pagination");
@@ -81,7 +85,7 @@ function mudarPagina(p) {
   render();
 }
 
-// 4. Filtros de pesquisa
+// Filtros de pesquisa
 function filtrar() {
   const busca = document.getElementById("search").value.toLowerCase();
   const area = document.getElementById("area").value;
@@ -103,7 +107,7 @@ function filtrar() {
   render();
 }
 
-// 5. Injeção do Widget de Acessibilidade (VLibras)
+// Injeção do Widget de Acessibilidade (VLibras)
 const scriptVlibras = document.createElement("script");
 scriptVlibras.src = "https://vlibras.gov.br/app/vlibras-plugin.js";
 
